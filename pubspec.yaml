@@ -1,5 +1,5 @@
-name: billiard_billing
-description: Billing System for Billiard
+name: billing_dansen
+description: Billing System for Billiard - outlet Danau Sentarum
 publish_to: "none"
 
 version: 1.24.0+40
