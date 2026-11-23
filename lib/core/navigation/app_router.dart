@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../features/auth/login_page.dart';
+import '../startup_log.dart';
 import '../../features/billing/billing_page.dart';
 import '../../features/booking/booking_page.dart';
 import '../../features/category/category_page.dart';
@@ -66,7 +67,15 @@ CustomTransitionPage<void> _fadeThroughPage(Widget child) {
 final appRouter = GoRouter(
   initialLocation: "/meja",
   redirect: (context, state) async {
-    final loggedIn = await _sessionStorage.hasSession();
+    bool loggedIn;
+    try {
+      loggedIn = await _sessionStorage.hasSession();
+    } catch (e) {
+      // File sesi (shared_preferences.json) rusak: anggap belum login
+      // daripada router macet dan layar hitam.
+      StartupLog.write('hasSession gagal: $e');
+      loggedIn = false;
+    }
     final loggingIn = state.matchedLocation == "/login";
 
     if (!loggedIn && !loggingIn) return "/login";
